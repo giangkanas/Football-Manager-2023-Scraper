@@ -8,9 +8,9 @@ def startScrapping(first,last):
     links = list(pd.read_csv("player_links.csv",delimiter=" ",header=None)[0])
 
     try:
-        with open('FM23_dataset.json', 'r') as openfile:
+        with open('FM23_dataset.json', 'r',encoding='utf-8') as openfile:
             # Reading from json file
-            dataset = json.load(openfile) 
+            dataset = json.load(openfile,ensure_ascii=False) 
     except:
         dataset = {}
 
@@ -21,15 +21,15 @@ def startScrapping(first,last):
         player_data.pop("Name")
         dataset[name] = player_data 
         
-        with open('FM23_dataset.json', 'w') as openfile:
+        with open('FM23_dataset.json', 'w',encoding='utf-8') as openfile:
             # Reading from json file
-            json.dump(dataset,openfile)
-        print(i)
-        sleep(random.randint(1,5))
+            json.dump(dataset,openfile,indent=4,ensure_ascii=False)
+        print(i,links[i])
+        # sleep(random.randint(1,5))
     return dataset
         
 
-dataset = startScrapping(0,500)
+dataset = startScrapping(0,5000)
 
 
         
