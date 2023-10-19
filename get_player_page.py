@@ -5,7 +5,7 @@ def getPlayerBasicInfo(url):
     
     response = requests.get(url)
     html_document = response.text         
-    soup = BeautifulSoup(html_document , 'lxml')
+    soup = BeautifulSoup(html_document , 'html.parser')
     
     player_basic_info = soup.find(attrs={"id":"player_info"})
     
@@ -33,8 +33,13 @@ def getMainInfo(player_basic_info):
     extra_info = []
     for i in main_info.find_all(attrs = { "class": "value" }):
         extra_info.append(i.get_text().strip())
-    basic_info["Club"] = extra_info[0]
-    basic_info["Nationality"] = extra_info[1]
+    
+    try:
+        basic_info["Club"] = extra_info[0]
+        basic_info["Nationality"] = extra_info[1]
+    except:
+        basic_info["Club"] = ""
+        basic_info["Nationality"] = extra_info[0]
         
     columns = player_basic_info.find_all(attrs = {"class":"column"})
     for index,column in enumerate(columns):
@@ -62,7 +67,7 @@ def getMainInfo(player_basic_info):
         
     """ Some final changes """
     basic_info["Position"] = player_basic_info.find("span",{"class" : "desktop_positions"}).get_text().split(", ")
-    basic_info.pop("Unique ID")
+    # basic_info.pop("Unique ID")
     return basic_info
 
 
@@ -87,7 +92,6 @@ def getPlayerPage(url):
 # for url in urls:
 #     dataset.append(getPlayerPage(url))
 #     print(url)
-
 
 
 
